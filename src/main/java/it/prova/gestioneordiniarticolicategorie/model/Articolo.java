@@ -157,8 +157,8 @@ public class Articolo {
 				? DateTimeFormatter.ofPattern("dd/MM/yyyy").format(dataInserimento)
 				: " N.D.";
 
-		return "Articolo [id=" + id + ", descrizione=" + descrizione + ", numeroSeriale=" + numeroSeriale
-				+ ", prezzoSingolo=" + prezzoSingolo + ", dataInserimento=" + dataInserimentoString + "]";
+		return "Articolo [id = " + id + ", descrizione = " + descrizione + ", numeroSeriale = " + numeroSeriale
+				+ ", prezzoSingolo = " + prezzoSingolo + ", dataInserimento = " + dataInserimentoString + "]";
 	}
 
 }

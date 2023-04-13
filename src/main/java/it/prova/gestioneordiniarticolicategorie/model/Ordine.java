@@ -148,8 +148,8 @@ public class Ordine {
 				? DateTimeFormatter.ofPattern("dd/MM/yyyy").format(dataScadenza)
 				: " N.D.";
 
-		return "Ordine [id=" + id + ", nomeDestinatario=" + nomeDestinatario + ", indirizzoSpedizione="
-				+ indirizzoSpedizione + ", dataSpedizione=" + dataSpedizioneString + ", dataScadenza="
+		return "Ordine [id = " + id + ", nomeDestinatario = " + nomeDestinatario + ", indirizzoSpedizione = "
+				+ indirizzoSpedizione + ", dataSpedizione = " + dataSpedizioneString + ", dataScadenza = "
 				+ dataScadenzaString + "]";
 	}
 
