@@ -2,13 +2,16 @@ package it.prova.gestioneordiniarticolicategorie.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 import it.prova.gestioneordiniarticolicategorie.dao.OrdineDAO;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class OrdineServiceImpl implements OrdineService {
 
 	private OrdineDAO ordineDAO;
-	
+
 	@Override
 	public void setOrdineDAO(OrdineDAO ordineDAO) {
 		this.ordineDAO = ordineDAO;
@@ -16,32 +19,107 @@ public class OrdineServiceImpl implements OrdineService {
 
 	@Override
 	public List<Ordine> listAll() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+
+			// injection
+			ordineDAO.setEntityManager(entityManager);
+
+			return ordineDAO.list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
 	}
 
 	@Override
 	public Ordine caricaSingoloElemento(Long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+
+			// injection
+			ordineDAO.setEntityManager(entityManager);
+
+			return ordineDAO.get(id);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
 	}
 
 	@Override
 	public void aggiorna(Ordine ordineInstance) throws Exception {
-		// TODO Auto-generated method stub
-		
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+
+			entityManager.getTransaction().begin();
+
+			// injection
+			ordineDAO.setEntityManager(entityManager);
+
+			ordineDAO.update(ordineInstance);
+
+			entityManager.getTransaction().commit();
+		} catch (Exception e) {
+			entityManager.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+
 	}
 
 	@Override
 	public void inserisciNuovo(Ordine ordineInstance) throws Exception {
-		// TODO Auto-generated method stub
-		
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+
+			entityManager.getTransaction().begin();
+
+			// injection
+			ordineDAO.setEntityManager(entityManager);
+
+			ordineDAO.insert(ordineInstance);
+
+			entityManager.getTransaction().commit();
+		} catch (Exception e) {
+			entityManager.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+
 	}
 
 	@Override
 	public void rimuovi(Long idOrdine) throws Exception {
-		// TODO Auto-generated method stub
-		
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+
+			entityManager.getTransaction().begin();
+
+			// injection
+			ordineDAO.setEntityManager(entityManager);
+
+			ordineDAO.delete(ordineDAO.get(idOrdine));
+
+			entityManager.getTransaction().commit();
+		} catch (Exception e) {
+			entityManager.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+
 	}
 
 }
