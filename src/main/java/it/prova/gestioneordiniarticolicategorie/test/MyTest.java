@@ -7,6 +7,7 @@ import javax.management.RuntimeErrorException;
 
 import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
+import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 import it.prova.gestioneordiniarticolicategorie.service.ArticoloService;
 import it.prova.gestioneordiniarticolicategorie.service.CategoriaService;
@@ -42,10 +43,56 @@ public class MyTest {
 //			testInserimentoNuovoArticolo(ordineServiceInstance, articoloServiceInstance);
 //			System.out.println("In tabella Ordine ci sono " + ordineServiceInstance.listAll().size() + " elementi");
 //			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
-			
-			testAggiornamentoArticoloEsistente(articoloServiceInstance);
+
+//			testAggiornamentoArticoloEsistente(articoloServiceInstance);
+//			System.out.println("In tabella Ordine ci sono " + ordineServiceInstance.listAll().size() + " elementi");
+//			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
+
+//			testRimozioneArticoloDaOrdine(articoloServiceInstance, ordineServiceInstance);
+//			System.out.println("In tabella Ordine ci sono " + ordineServiceInstance.listAll().size() + " elementi");
+//			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
+
+//			testInserimentoNuovaCategoria(categoriaServiceInstance);
+//			System.out
+//			.println("In tabella Categoria ci sono " + categoriaServiceInstance.listAll().size() + " elementi");
+
+//			testAggiornamentoCategoriaEsistente(categoriaServiceInstance);
+//			System.out
+//			.println("In tabella Categoria ci sono " + categoriaServiceInstance.listAll().size() + " elementi");
+
+//			testAssociaArticoloACategoria(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
+//			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
+//			System.out
+//					.println("In tabella Categoria ci sono " + categoriaServiceInstance.listAll().size() + " elementi");
+
+//			testAssociaCategoriaAdArticolo(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
+//			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
+//			System.out
+//					.println("In tabella Categoria ci sono " + categoriaServiceInstance.listAll().size() + " elementi");
+
+//			testRimozioneCompletaArticolo(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
+//			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
+//			System.out
+//					.println("In tabella Categoria ci sono " + categoriaServiceInstance.listAll().size() + " elementi");
+//			
+
+//			testRimozioneCompletaCategoria(articoloServiceInstance, categoriaServiceInstance, ordineServiceInstance);
+//			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
+//			System.out
+//					.println("In tabella Categoria ci sono " + categoriaServiceInstance.listAll().size() + " elementi");
+//			
+
+//			testRimuoviOrdine(ordineServiceInstance, articoloServiceInstance);
+//			System.out.println("In tabella Ordine ci sono " + ordineServiceInstance.listAll().size() + " elementi");
+//			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
+
+			testListaOrdiniPerCategoria(ordineServiceInstance, articoloServiceInstance, categoriaServiceInstance);
 			System.out.println("In tabella Ordine ci sono " + ordineServiceInstance.listAll().size() + " elementi");
 			System.out.println("In tabella Articolo ci sono " + articoloServiceInstance.listAll().size() + " elementi");
+			System.out
+					.println("In tabella Categoria ci sono " + categoriaServiceInstance.listAll().size() + " elementi");
+
+			
 			
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -88,7 +135,7 @@ public class MyTest {
 			throw new RuntimeException("testAggiornamentoOrdineEsistente FALLITO: update non avvenuto.");
 		}
 		System.out.println("Dopo l'aggiornamento: " + ordineReloaded);
-		System.out.println("------------- testInserimentoNuovoOrdine FINE -------------");
+		System.out.println("------------- testAggiornamentoOrdineEsistente FINE -------------");
 
 	}
 
@@ -116,12 +163,12 @@ public class MyTest {
 
 	}
 
-	private static void testAggiornamentoArticoloEsistente (ArticoloService articoloServiceInstance) throws Exception {
+	private static void testAggiornamentoArticoloEsistente(ArticoloService articoloServiceInstance) throws Exception {
 		System.out.println("------------- testAggiornamentoArticoloEsistente INIZIO -------------");
 
 		List<Articolo> listaArticoliPresenti = articoloServiceInstance.listAll();
 		if (listaArticoliPresenti.size() < 1) {
-			throw new RuntimeException("testAggiornamentoOrdineEsistente FALLITO: non sono presenti voci nel DB.");
+			throw new RuntimeException("testAggiornamentoArticoloEsistente FALLITO: non sono presenti voci nel DB.");
 		}
 
 		Articolo articoloDaAggiornare = listaArticoliPresenti.get(0);
@@ -132,11 +179,294 @@ public class MyTest {
 
 		Articolo articoloReloaded = articoloServiceInstance.caricaSingoloElemento(articoloDaAggiornare.getId());
 		if (articoloReloaded.getId() != articoloDaAggiornare.getId()) {
-			throw new RuntimeException("testAggiornamentoOrdineEsistente FALLITO: update non avvenuto.");
+			throw new RuntimeException("testAggiornamentoArticoloEsistente FALLITO: update non avvenuto.");
 		}
 		System.out.println("Dopo l'aggiornamento: " + articoloReloaded);
 		System.out.println("------------- testAggiornamentoArticoloEsistente FINE -------------");
 
-		
 	}
+
+	private static void testRimozioneArticoloDaOrdine(ArticoloService articoloServiceInstance,
+			OrdineService ordineServiceInstance) throws Exception {
+		System.out.println("------------- testRimozioneArticoloDaOrdine INIZIO -------------");
+		List<Ordine> listaOrdiniPresenti = ordineServiceInstance.listAll();
+		if (listaOrdiniPresenti.size() < 1) {
+			throw new RuntimeException("testRimozioneArticoloDaOrdine FALLITO: non sono presenti voci nel DB.");
+		}
+
+		Ordine ordineDaCollegare = listaOrdiniPresenti.get(0);
+		Long idOrdineDaCollegare = ordineDaCollegare.getId();
+		Articolo nuovoArticolo = new Articolo("Scarpe Nike", "12345678", 329D, LocalDate.now());
+		nuovoArticolo.setOrdine(ordineDaCollegare);
+		articoloServiceInstance.inserisciNuovo(nuovoArticolo);
+		if (nuovoArticolo.getId() == null) {
+			throw new RuntimeException("testRimozioneArticoloDaOrdine FALLITO: Articolo non inserito");
+		}
+		if (!nuovoArticolo.getOrdine().getId().equals(idOrdineDaCollegare)) {
+			throw new RuntimeException("testRimozioneArticoloDaOrdine FALLITO: L'ID dell'ordine non corrisponde");
+		}
+		Long idArticoloDaEliminare = nuovoArticolo.getId();
+		articoloServiceInstance.rimuovi(idArticoloDaEliminare);
+		Articolo articoloSupposedToBeRemoved = articoloServiceInstance.caricaSingoloElemento(idArticoloDaEliminare);
+		if (articoloSupposedToBeRemoved != null) {
+			throw new RuntimeException("testRimozioneArticoloDaOrdine FALLITO: articolo non rimosso");
+		}
+		System.out.println("------------- testRimozioneArticoloDaOrdine FINE -------------");
+	}
+
+	private static void testInserimentoNuovaCategoria(CategoriaService categoriaServiceInstance) throws Exception {
+		System.out.println("------------- testInserimentoNuovaCategoria INIZIO -------------");
+
+		Categoria categoriaDaInserire = new Categoria("Abbigliamento", "001");
+		categoriaServiceInstance.inserisciNuovo(categoriaDaInserire);
+		if (categoriaDaInserire.getId() == null) {
+			throw new RuntimeException("testInserimentoNuovaCategoria FALLITO: Ordine non inserito.");
+		}
+		System.out.println("------------- testInserimentoNuovaCategoria FINE -------------");
+	}
+
+	private static void testAggiornamentoCategoriaEsistente(CategoriaService categoriaServiceInstance)
+			throws Exception {
+		System.out.println("------------- testAggiornamentoCategoriaEsistente INIZIO -------------");
+
+		List<Categoria> listaCategoriePresenti = categoriaServiceInstance.listAll();
+		if (listaCategoriePresenti.size() < 1) {
+			throw new RuntimeException("testAggiornamentoCategoriaEsistente FALLITO: non sono presenti voci nel DB.");
+		}
+
+		Categoria categoriaDaAggiornare = listaCategoriePresenti.get(0);
+		System.out.println("Prima dell'aggiornamento: " + categoriaDaAggiornare);
+		String nuovaDescrizione = "Informatica";
+		categoriaDaAggiornare.setDescrizione(nuovaDescrizione);
+		categoriaServiceInstance.aggiorna(categoriaDaAggiornare);
+
+		Categoria categoriaReloaded = categoriaServiceInstance.caricaSingoloElemento(categoriaDaAggiornare.getId());
+		if (categoriaReloaded.getId() != categoriaDaAggiornare.getId()) {
+			throw new RuntimeException("testAggiornamentoCategoriaEsistente FALLITO: update non avvenuto.");
+		}
+		System.out.println("Dopo l'aggiornamento: " + categoriaReloaded);
+		System.out.println("------------- testAggiornamentoCategoriaEsistente FINE -------------");
+
+	}
+
+	private static void testAssociaArticoloACategoria(ArticoloService articoloServiceInstance,
+			CategoriaService categoriaServiceInstance, OrdineService ordineServiceInstance) throws Exception {
+		System.out.println("------------- testAssociaArticoloECategoria INIZIO -------------");
+		Categoria nuovaCategoria = new Categoria("Abbigliamento", "201");
+		categoriaServiceInstance.inserisciNuovo(nuovaCategoria);
+		if (nuovaCategoria.getId() == null) {
+			throw new RuntimeException("testAssociaArticoloECategoria FALLITO: Ordine non inserito.");
+		}
+		Ordine nuovoOrdine = new Ordine("Luca De Luca", "Via Casilina 52", LocalDate.of(2023, 5, 31),
+				LocalDate.of(2023, 8, 30));
+		ordineServiceInstance.inserisciNuovo(nuovoOrdine);
+		if (nuovoOrdine.getId() == null) {
+			throw new RuntimeException("testAssociaArticoloECategoria FALLITO: Ordine non inserito.");
+		}
+		Articolo nuovoArticolo = new Articolo("Scarpe Nike", "0001", 299D, LocalDate.now());
+		nuovoArticolo.setOrdine(nuovoOrdine);
+		articoloServiceInstance.inserisciNuovo(nuovoArticolo);
+		if (nuovoArticolo.getId() == null) {
+			throw new RuntimeException("testAssociaArticoloECategoria FALLITO: Ordine non inserito.");
+		}
+
+		categoriaServiceInstance.aggiungiArticolo(nuovaCategoria, nuovoArticolo);
+		Categoria categoriaReloaded = categoriaServiceInstance.caricaCategoriaEager(nuovaCategoria.getId());
+		if (categoriaReloaded.getArticoli().isEmpty()) {
+			throw new RuntimeException("testAssociaArticoloECategoria FALLITO: articolo non associato a categoria");
+		}
+
+		System.out.println("------------- testAssociaArticoloECategoria FINE -------------");
+
+	}
+
+	private static void testAssociaCategoriaAdArticolo(ArticoloService articoloServiceInstance,
+			CategoriaService categoriaServiceInstance, OrdineService ordineServiceInstance) throws Exception {
+		System.out.println("------------- testAssociaCategoriaAdArticolo INIZIO -------------");
+		Categoria nuovaCategoria = new Categoria("Abbigliamento", "201");
+		categoriaServiceInstance.inserisciNuovo(nuovaCategoria);
+		if (nuovaCategoria.getId() == null) {
+			throw new RuntimeException("testAssociaCategoriaAdArticolo FALLITO: Ordine non inserito.");
+		}
+		Ordine nuovoOrdine = new Ordine("Luca De Luca", "Via Casilina 52", LocalDate.of(2023, 5, 31),
+				LocalDate.of(2023, 8, 30));
+		ordineServiceInstance.inserisciNuovo(nuovoOrdine);
+		if (nuovoOrdine.getId() == null) {
+			throw new RuntimeException("testAssociaCategoriaAdArticolo FALLITO: Ordine non inserito.");
+		}
+		Articolo nuovoArticolo = new Articolo("Scarpe Nike", "0001", 299D, LocalDate.now());
+		nuovoArticolo.setOrdine(nuovoOrdine);
+		articoloServiceInstance.inserisciNuovo(nuovoArticolo);
+		if (nuovoArticolo.getId() == null) {
+			throw new RuntimeException("testAssociaCategoriaAdArticolo FALLITO: Ordine non inserito.");
+		}
+
+		articoloServiceInstance.aggiungiCategoria(nuovoArticolo, nuovaCategoria);
+		Articolo articoloReloaded = articoloServiceInstance.caricaArticoloEager(nuovoArticolo.getId());
+		if (articoloReloaded.getCategorie().isEmpty()) {
+			throw new RuntimeException("testAssociaCategoriaAdArticolo FALLITO: articolo non associato a categoria");
+		}
+
+		System.out.println("------------- testAssociaCategoriaAdArticolo FINE -------------");
+	}
+
+	private static void testRimozioneCompletaArticolo(ArticoloService articoloServiceInstance,
+			CategoriaService categoriaServiceInstance, OrdineService ordineServiceInstance) throws Exception {
+		System.out.println("------------- testRimozioneCompletaArticolo INIZIO -------------");
+		Categoria nuovaCategoria1 = new Categoria("Abbigliamento", "201");
+		Categoria nuovaCategoria2 = new Categoria("Informatica", "202");
+		categoriaServiceInstance.inserisciNuovo(nuovaCategoria1);
+		categoriaServiceInstance.inserisciNuovo(nuovaCategoria2);
+		if (nuovaCategoria1.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaArticolo FALLITO: categoria non inserita.");
+		}
+		if (nuovaCategoria2.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaArticolo FALLITO: categoria non inserita.");
+		}
+		Ordine nuovoOrdine = new Ordine("Luca De Luca", "Via Casilina 52", LocalDate.of(2023, 5, 31),
+				LocalDate.of(2023, 8, 30));
+		ordineServiceInstance.inserisciNuovo(nuovoOrdine);
+		if (nuovoOrdine.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaArticolo FALLITO: Ordine non inserito.");
+		}
+		Articolo nuovoArticolo = new Articolo("Scarpe Nike", "0001", 299D, LocalDate.now());
+		nuovoArticolo.setOrdine(nuovoOrdine);
+		articoloServiceInstance.inserisciNuovo(nuovoArticolo);
+		if (nuovoArticolo.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaArticolo FALLITO: articolo non inserito.");
+		}
+
+		articoloServiceInstance.aggiungiCategoria(nuovoArticolo, nuovaCategoria1);
+		articoloServiceInstance.aggiungiCategoria(nuovoArticolo, nuovaCategoria2);
+
+		Articolo articoloDaRimuovere = articoloServiceInstance.caricaArticoloEager(nuovoArticolo.getId());
+		if (articoloDaRimuovere.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaArticolo FALLITO: Ordine non inserito.");
+		}
+		if (articoloDaRimuovere.getCategorie().isEmpty()) {
+			throw new RuntimeException("testRimozioneCompletaArticolo FALLITO: categoria non associata ad articolo");
+		}
+		// rimozione completa articolo
+		articoloServiceInstance.rimozioneArticoloCompleta(articoloDaRimuovere.getId());
+
+		System.out.println("------------- testRimozioneCompletaArticolo FINE -------------");
+
+	}
+
+	private static void testRimozioneCompletaCategoria(ArticoloService articoloServiceInstance,
+			CategoriaService categoriaServiceInstance, OrdineService ordineServiceInstance) throws Exception {
+		System.out.println("------------- testRimozioneCompletaCategoria INIZIO -------------");
+		Categoria nuovaCategoria = new Categoria("Abbigliamento", "201");
+		categoriaServiceInstance.inserisciNuovo(nuovaCategoria);
+		if (nuovaCategoria.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaCategoria FALLITO: categoria non inserita.");
+		}
+		Ordine nuovoOrdine = new Ordine("francesco crispi", "Via appia 2", LocalDate.of(2023, 5, 31),
+				LocalDate.of(2023, 8, 30));
+		ordineServiceInstance.inserisciNuovo(nuovoOrdine);
+		if (nuovoOrdine.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaCategoria FALLITO: Ordine non inserito.");
+		}
+		Articolo nuovoArticolo1 = new Articolo("Scarpe Nike", "0001", 299D, LocalDate.now());
+		Articolo nuovoArticolo2 = new Articolo("Scarpe Nike", "0001", 299D, LocalDate.now());
+		nuovoArticolo1.setOrdine(nuovoOrdine);
+		articoloServiceInstance.inserisciNuovo(nuovoArticolo1);
+		if (nuovoArticolo1.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaCategoria FALLITO: articolo non inserito.");
+		}
+		nuovoArticolo2.setOrdine(nuovoOrdine);
+		articoloServiceInstance.inserisciNuovo(nuovoArticolo2);
+		if (nuovoArticolo2.getId() == null) {
+			throw new RuntimeException("testRimozioneCompletaCategoria FALLITO: articolo non inserito.");
+		}
+
+		categoriaServiceInstance.aggiungiArticolo(nuovaCategoria, nuovoArticolo1);
+		categoriaServiceInstance.aggiungiArticolo(nuovaCategoria, nuovoArticolo2);
+		Categoria categoriaReloaded = categoriaServiceInstance.caricaCategoriaEager(nuovaCategoria.getId());
+		if (categoriaReloaded.getArticoli().isEmpty()) {
+			throw new RuntimeException("testRimozioneCompletaCategoria FALLITO: articolo non associato a categoria");
+		}
+
+		// rimozione completa categoria
+		categoriaServiceInstance.rimozioneCompletaCategoria(categoriaReloaded.getId());
+
+		System.out.println("------------- testRimozioneCompletaCategoria FINE -------------");
+
+	}
+
+	private static void testRimuoviOrdine(OrdineService ordineServiceInstance, ArticoloService articoloServiceInstance)
+			throws Exception {
+		System.out.println("------------- testRimuoviOrdine INIZIO -------------");
+
+		Ordine ordineDaInserire = new Ordine("Mario Rossi", "Via Mosca 52", LocalDate.of(2023, 04, 21),
+				LocalDate.of(2023, 06, 30));
+		ordineServiceInstance.inserisciNuovo(ordineDaInserire);
+		Long idOrdineDaInserire = ordineDaInserire.getId();
+		if (idOrdineDaInserire == null) {
+			throw new RuntimeException("testRimuoviOrdine FALLITO: Ordine non inserito.");
+		}
+		Articolo nuovoArticolo = new Articolo("Scarpe Nike", "12345678", 329D, LocalDate.now());
+		nuovoArticolo.setOrdine(ordineDaInserire);
+		articoloServiceInstance.inserisciNuovo(nuovoArticolo);
+		if (nuovoArticolo.getId() == null) {
+			throw new RuntimeException("testRimuoviOrdine FALLITO: Articolo non inserito");
+		}
+		if (!nuovoArticolo.getOrdine().getId().equals(idOrdineDaInserire)) {
+			throw new RuntimeException("testRimuoviOrdine FALLITO: L'ID dell'ordine non corrisponde");
+		}
+
+		// test eccezione custom
+//		ordineServiceInstance.rimuovi(idOrdineDaInserire);
+
+		Ordine ordineDaEliminare = new Ordine("Mario Rossi", "Via Mosca 52", LocalDate.of(2023, 04, 21),
+				LocalDate.of(2023, 06, 30));
+		ordineServiceInstance.inserisciNuovo(ordineDaEliminare);
+		Long idOrdineDaEliminare = ordineDaEliminare.getId();
+		if (idOrdineDaEliminare == null) {
+			throw new RuntimeException("testRimuoviOrdine FALLITO: Ordine non inserito.");
+		}
+
+		ordineServiceInstance.rimuovi(idOrdineDaEliminare);
+
+		System.out.println("------------- testRimuoviOrdine FINE -------------");
+
+	}
+
+	private static void testListaOrdiniPerCategoria(OrdineService ordineServiceInstance,
+			ArticoloService articoloServiceInstance, CategoriaService categoriaServiceInstance) throws Exception {
+		System.out.println("------------- testListaOrdiniPerCategoria INIZIO -------------");
+		Categoria nuovaCategoria = new Categoria("Abbigliamento", "201");
+		categoriaServiceInstance.inserisciNuovo(nuovaCategoria);
+		Long idNuovaCategoria = nuovaCategoria.getId();
+		if (idNuovaCategoria == null) {
+			throw new RuntimeException("testListaOrdiniPerCategoria FALLITO: categoria non inserita.");
+		}
+		Ordine nuovoOrdine = new Ordine("Luca De Luca", "Via Casilina 52", LocalDate.of(2023, 5, 31),
+				LocalDate.of(2023, 8, 30));
+		ordineServiceInstance.inserisciNuovo(nuovoOrdine);
+		if (nuovoOrdine.getId() == null) {
+			throw new RuntimeException("testListaOrdiniPerCategoria FALLITO: Ordine non inserito.");
+		}
+		Articolo nuovoArticolo = new Articolo("Scarpe Nike", "0001", 299D, LocalDate.now());
+		nuovoArticolo.setOrdine(nuovoOrdine);
+		articoloServiceInstance.inserisciNuovo(nuovoArticolo);
+		if (nuovoArticolo.getId() == null) {
+			throw new RuntimeException("testListaOrdiniPerCategoria FALLITO: Ordine non inserito.");
+		}
+		
+		articoloServiceInstance.aggiungiCategoria(nuovoArticolo, nuovaCategoria);
+		Articolo articoloReloaded = articoloServiceInstance.caricaArticoloEager(nuovoArticolo.getId());
+		if (articoloReloaded.getCategorie().isEmpty()) {
+			throw new RuntimeException("testListaOrdiniPerCategoria FALLITO: articolo non associato a categoria");
+		}
+		
+		List<Ordine> listaOrdiniPerCategoria = ordineServiceInstance.listaOrdiniPerCategoria(idNuovaCategoria);
+		if (listaOrdiniPerCategoria.size()<1) {
+			throw new RuntimeException("testListaOrdiniPerCategoria FALLITO: lista vuota");
+		}
+
+		System.out.println(listaOrdiniPerCategoria);
+		System.out.println("------------- testListaOrdiniPerCategoria FINE -------------");
+	}
+
 }

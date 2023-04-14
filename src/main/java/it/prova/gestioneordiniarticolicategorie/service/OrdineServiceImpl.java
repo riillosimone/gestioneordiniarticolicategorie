@@ -4,17 +4,25 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import it.prova.gestioneordiniarticolicategorie.dao.ArticoloDAO;
 import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 import it.prova.gestioneordiniarticolicategorie.dao.OrdineDAO;
+import it.prova.gestioneordiniarticolicategorie.exception.OrdineConArticoliException;
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
 
 public class OrdineServiceImpl implements OrdineService {
 
 	private OrdineDAO ordineDAO;
+	private ArticoloDAO articoloDAO;
 
 	@Override
 	public void setOrdineDAO(OrdineDAO ordineDAO) {
 		this.ordineDAO = ordineDAO;
+	}
+	
+	@Override
+	public void setArticoloDAO(ArticoloDAO articoloDAO) {
+		this.articoloDAO = articoloDAO;
 	}
 
 	@Override
@@ -108,6 +116,11 @@ public class OrdineServiceImpl implements OrdineService {
 
 			// injection
 			ordineDAO.setEntityManager(entityManager);
+			articoloDAO.setEntityManager(entityManager);
+			
+			if(articoloDAO.findAllByOrdine(idOrdine).size()>0) {
+				throw new OrdineConArticoliException("Impossibile rimuovere ordine con articoli associati");
+			}
 
 			ordineDAO.delete(ordineDAO.get(idOrdine));
 
@@ -121,5 +134,25 @@ public class OrdineServiceImpl implements OrdineService {
 		}
 
 	}
+
+	@Override
+	public List<Ordine> listaOrdiniPerCategoria(Long idCategoria) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+
+			// injection
+			ordineDAO.setEntityManager(entityManager);
+
+			return ordineDAO.findAllByCategoria(idCategoria);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
+
 
 }

@@ -151,6 +151,16 @@ public class Articolo {
 		this.categorie = categorie;
 	}
 
+	public void addToCategorie (Categoria categoriaInstance) {
+		this.categorie.add(categoriaInstance);
+		categoriaInstance.getArticoli().add(this);
+	}
+	
+	public void removeFromCategorie (Categoria categoriaInstance) {
+		this.categorie.remove(categoriaInstance);
+		categoriaInstance.getArticoli().remove(this);
+	}
+	
 	@Override
 	public String toString() {
 		String dataInserimentoString = dataInserimento != null
@@ -161,4 +171,5 @@ public class Articolo {
 				+ ", prezzoSingolo = " + prezzoSingolo + ", dataInserimento = " + dataInserimentoString + "]";
 	}
 
+	
 }

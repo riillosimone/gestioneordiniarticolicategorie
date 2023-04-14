@@ -3,6 +3,7 @@ package it.prova.gestioneordiniarticolicategorie.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 
@@ -47,6 +48,23 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 			throw new Exception("Problema valore in input.");
 		}
 		entityManager.remove(entityManager.merge(input));
+	}
+	@Override
+	public Categoria caricaCategoriaEager(Long idCategoria) throws Exception {
+		TypedQuery<Categoria> query = entityManager.createQuery("from Categoria c join fetch c.articoli a where c.id = ?1", Categoria.class);
+		query.setParameter(1, idCategoria);
+		return query.getResultStream().findFirst().orElse(null);
+	}
+	@Override
+	public void deleteCompletaCAtegoria(Long idCategoria) throws Exception {
+		entityManager.createNativeQuery("delete from articolo_categoria a where a.categoria_id = ?1").setParameter(1, idCategoria).executeUpdate();
+		entityManager.createNativeQuery("delete from categoria c where c.id = ?1").setParameter(1, idCategoria).executeUpdate();
+	}
+	@Override
+	public List<Categoria> findDistinctByOrdine(Long idOrdine) throws Exception {
+		TypedQuery<Categoria> query = entityManager.createQuery("select distinct c from Categoria c join c.articoli a where a.ordine_id = ?1", Categoria.class);
+		query.setParameter(1, idOrdine);
+		return query.getResultList();
 	}
 
 
