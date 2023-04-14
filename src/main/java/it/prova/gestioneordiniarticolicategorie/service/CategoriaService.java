@@ -31,5 +31,6 @@ public interface CategoriaService {
 	
 	public List<Categoria> listaCategoriaPerOrdine (Long idOrdine) throws Exception;
 	
+	public List<String> listaCodiciCategoriaDiUnMese (int anno, int mese) throws Exception;
 	
 }

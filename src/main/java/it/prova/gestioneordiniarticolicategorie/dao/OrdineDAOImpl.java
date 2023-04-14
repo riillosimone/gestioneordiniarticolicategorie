@@ -3,7 +3,6 @@ package it.prova.gestioneordiniarticolicategorie.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import it.prova.gestioneordiniarticolicategorie.model.Ordine;
@@ -74,6 +73,14 @@ public class OrdineDAOImpl implements OrdineDAO {
 				"select o from Ordine o join o.articoli a join a.categorie c where c.id = ?1 order by o.dataSpedizione desc",
 				Ordine.class).setParameter(1, idCategoria);
 		return query.getResultStream().findFirst().orElse(null);
+	}
+
+	@Override
+	public List<String> indirizziDegliOrdiniContenentiNumeroSeriale(String stringaNumeroSeriale) throws Exception {
+		TypedQuery<String> query = entityManager.createQuery(
+				"select distinct o.indirizzoSpedizione from Ordine o join o.articoli a where a.numeroSeriale like ?1", String.class);
+		query.setParameter(1,"%"+stringaNumeroSeriale+"%");
+		return query.getResultList();
 	}
 
 }

@@ -13,4 +13,8 @@ public interface ArticoloDAO extends IBaseDAO<Articolo>{
 	public List<Articolo> findAllByOrdine (Long idOrdine) throws Exception;
 	
 	public Double sumPrezzoArticoliDiUnaCategoria (Long idCategoria) throws Exception;
+	
+	public Double sumPrezzoArticoliDiUnDestinatario (String nomeDestinatario) throws Exception;
+	
+	public List<Articolo> listaArticoliConErroriInOrdine () throws Exception;
 } 

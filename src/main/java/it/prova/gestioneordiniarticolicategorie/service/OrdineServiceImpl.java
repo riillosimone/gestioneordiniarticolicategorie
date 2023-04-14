@@ -171,6 +171,24 @@ public class OrdineServiceImpl implements OrdineService {
 		}
 	}
 
+	@Override
+	public List<String> indirizziConArticoliContenentiNumeroSeriale(String stringaNumeroSeriale) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+
+			// injection
+			ordineDAO.setEntityManager(entityManager);
+
+			return ordineDAO.indirizziDegliOrdiniContenentiNumeroSeriale(stringaNumeroSeriale);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
 
 
 }

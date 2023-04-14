@@ -28,4 +28,6 @@ public interface OrdineService {
 	
 	public Ordine ordinePiuRecentePerCategoria (Long idCategoria) throws Exception;
 	
+	public List<String> indirizziConArticoliContenentiNumeroSeriale (String stringaNumeroSeriale) throws Exception;
+	
 }

@@ -7,15 +7,15 @@ import javax.persistence.TypedQuery;
 
 import it.prova.gestioneordiniarticolicategorie.model.Categoria;
 
-public class CategoriaDAOImpl implements CategoriaDAO{
+public class CategoriaDAOImpl implements CategoriaDAO {
 
-	
 	private EntityManager entityManager;
-	
+
 	@Override
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
+
 	@Override
 	public List<Categoria> list() throws Exception {
 		return entityManager.createQuery("from Categoria", Categoria.class).getResultList();
@@ -49,24 +49,38 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 		}
 		entityManager.remove(entityManager.merge(input));
 	}
+
 	@Override
 	public Categoria caricaCategoriaEager(Long idCategoria) throws Exception {
-		TypedQuery<Categoria> query = entityManager.createQuery("from Categoria c join fetch c.articoli a where c.id = ?1", Categoria.class);
+		TypedQuery<Categoria> query = entityManager
+				.createQuery("from Categoria c join fetch c.articoli a where c.id = ?1", Categoria.class);
 		query.setParameter(1, idCategoria);
 		return query.getResultStream().findFirst().orElse(null);
 	}
+
 	@Override
 	public void deleteCompletaCAtegoria(Long idCategoria) throws Exception {
-		entityManager.createNativeQuery("delete from articolo_categoria a where a.categoria_id = ?1").setParameter(1, idCategoria).executeUpdate();
-		entityManager.createNativeQuery("delete from categoria c where c.id = ?1").setParameter(1, idCategoria).executeUpdate();
+		entityManager.createNativeQuery("delete from articolo_categoria a where a.categoria_id = ?1")
+				.setParameter(1, idCategoria).executeUpdate();
+		entityManager.createNativeQuery("delete from categoria c where c.id = ?1").setParameter(1, idCategoria)
+				.executeUpdate();
 	}
+
 	@Override
 	public List<Categoria> findDistinctByOrdine(Long idOrdine) throws Exception {
-		TypedQuery<Categoria> query = entityManager.createQuery("select distinct c from Categoria c join c.articoli a join a.ordine o where o.id = ?1", Categoria.class);
+		TypedQuery<Categoria> query = entityManager.createQuery(
+				"select distinct c from Categoria c join c.articoli a join a.ordine o where o.id = ?1",
+				Categoria.class);
 		query.setParameter(1, idOrdine);
 		return query.getResultList();
 	}
 
-
+	@Override
+	public List<String> listCodiciCategoriaDuranteUnMese(int anno, int mese) throws Exception {
+		TypedQuery<String> query = entityManager.createQuery(
+				"select distinct c.codice from Categoria c join c.articoli a join a.ordine o where month(o.dataSpedizione) = :mese and year(o.dataSpedizione) = :anno",
+				String.class).setParameter("mese", mese).setParameter("anno", anno);
+		return query.getResultList();
+	}
 
 }

@@ -54,14 +54,17 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 
 	@Override
 	public void deleteCompletoArticolo(Long idArticolo) throws Exception {
-		entityManager.createNativeQuery("delete from articolo_categoria a where a.articolo_id = ?1").setParameter(1, idArticolo).executeUpdate();
-		entityManager.createNativeQuery("delete from articolo a where a.id = ?1").setParameter(1, idArticolo).executeUpdate();
-			
+		entityManager.createNativeQuery("delete from articolo_categoria a where a.articolo_id = ?1")
+				.setParameter(1, idArticolo).executeUpdate();
+		entityManager.createNativeQuery("delete from articolo a where a.id = ?1").setParameter(1, idArticolo)
+				.executeUpdate();
+
 	}
 
 	@Override
 	public Articolo caricaArticoloEager(Long idArticolo) throws Exception {
-		TypedQuery<Articolo> query = entityManager.createQuery("from Articolo a join fetch a.categorie c where a.id = ?1", Articolo.class);
+		TypedQuery<Articolo> query = entityManager
+				.createQuery("from Articolo a join fetch a.categorie c where a.id = ?1", Articolo.class);
 		query.setParameter(1, idArticolo);
 		return query.getResultStream().findFirst().orElse(null);
 	}
@@ -76,10 +79,27 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 	@Override
 	public Double sumPrezzoArticoliDiUnaCategoria(Long idCategoria) throws Exception {
 		Double result = null;
-		Query query = entityManager.createQuery("select sum(a.prezzoSingolo) from Articolo a join a.categorie c where c.id = ?1").setParameter(1, idCategoria);
+		Query query = entityManager
+				.createQuery("select sum(a.prezzoSingolo) from Articolo a join a.categorie c where c.id = ?1")
+				.setParameter(1, idCategoria);
 		result = (Double) query.getSingleResult();
 		return result;
 	}
-	
+
+	@Override
+	public Double sumPrezzoArticoliDiUnDestinatario(String nomeDestinatario) throws Exception {
+		Double result = null;
+		Query query = entityManager
+				.createQuery("select sum(a.prezzoSingolo) from Articolo a join a.ordine o where o.nomeDestinatario like ?1")
+				.setParameter(1, nomeDestinatario);
+		result = (Double) query.getSingleResult();
+		return result;
+	}
+
+	@Override
+	public List<Articolo> listaArticoliConErroriInOrdine() throws Exception {
+		TypedQuery<Articolo> query = entityManager.createQuery("select a from Articolo a join a.ordine o where o.dataSpedizione > o.dataScadenza", Articolo.class);
+		return query.getResultList();
+	}
 
 }

@@ -11,4 +11,6 @@ public interface CategoriaDAO extends IBaseDAO<Categoria>{
 	public void deleteCompletaCAtegoria (Long idCategoria) throws Exception;
 	
 	public List<Categoria> findDistinctByOrdine (Long idOrdine) throws Exception;
+	
+	public List<String> listCodiciCategoriaDuranteUnMese (int anno, int mese) throws Exception;
 }

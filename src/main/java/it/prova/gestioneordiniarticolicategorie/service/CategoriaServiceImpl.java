@@ -206,4 +206,22 @@ public class CategoriaServiceImpl implements CategoriaService {
 		}
 	}
 
+	@Override
+	public List<String> listaCodiciCategoriaDiUnMese(int anno, int mese) throws Exception {
+		EntityManager entityManager = EntityManagerUtil.getEntityManager();
+		try {
+
+			// injection
+			categoriaDAO.setEntityManager(entityManager);
+
+			return categoriaDAO.listCodiciCategoriaDuranteUnMese(anno,mese);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			EntityManagerUtil.closeEntityManager(entityManager);
+		}
+	}
+
 }
