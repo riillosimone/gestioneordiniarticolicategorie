@@ -27,4 +27,6 @@ public interface ArticoloService {
 	public Articolo caricaArticoloEager (Long idArticolo) throws Exception;
 	
 	public void rimozioneArticoloCompleta (Long idArticolo) throws Exception;
+	
+	public Double sommaPrezzoArticoliDiUnaCategoria (Long idCategoria) throws Exception;
 }

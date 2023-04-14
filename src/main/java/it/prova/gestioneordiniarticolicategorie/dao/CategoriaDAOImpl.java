@@ -62,7 +62,7 @@ public class CategoriaDAOImpl implements CategoriaDAO{
 	}
 	@Override
 	public List<Categoria> findDistinctByOrdine(Long idOrdine) throws Exception {
-		TypedQuery<Categoria> query = entityManager.createQuery("select distinct c from Categoria c join c.articoli a where a.ordine_id = ?1", Categoria.class);
+		TypedQuery<Categoria> query = entityManager.createQuery("select distinct c from Categoria c join c.articoli a join a.ordine o where o.id = ?1", Categoria.class);
 		query.setParameter(1, idOrdine);
 		return query.getResultList();
 	}

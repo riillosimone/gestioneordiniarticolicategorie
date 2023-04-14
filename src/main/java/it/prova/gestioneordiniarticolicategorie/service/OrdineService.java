@@ -26,4 +26,6 @@ public interface OrdineService {
 	
 	public List<Ordine> listaOrdiniPerCategoria (Long idCategoria) throws Exception;
 	
+	public Ordine ordinePiuRecentePerCategoria (Long idCategoria) throws Exception;
+	
 }

@@ -11,4 +11,6 @@ public interface ArticoloDAO extends IBaseDAO<Articolo>{
 	public void deleteCompletoArticolo (Long idArticolo) throws Exception;
 	
 	public List<Articolo> findAllByOrdine (Long idOrdine) throws Exception;
+	
+	public Double sumPrezzoArticoliDiUnaCategoria (Long idCategoria) throws Exception;
 } 

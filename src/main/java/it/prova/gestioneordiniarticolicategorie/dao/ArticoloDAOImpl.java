@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
+import javax.persistence.Query;
+
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
 
 public class ArticoloDAOImpl implements ArticoloDAO {
@@ -69,6 +71,14 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 		TypedQuery<Articolo> query = entityManager.createQuery("from Articolo where ordine_id = ?1", Articolo.class);
 		query.setParameter(1, idOrdine);
 		return query.getResultList();
+	}
+
+	@Override
+	public Double sumPrezzoArticoliDiUnaCategoria(Long idCategoria) throws Exception {
+		Double result = null;
+		Query query = entityManager.createQuery("select sum(a.prezzoSingolo) from Articolo a join a.categorie c where c.id = ?1").setParameter(1, idCategoria);
+		result = (Double) query.getSingleResult();
+		return result;
 	}
 	
 
