@@ -3,7 +3,6 @@ package it.prova.gestioneordiniarticolicategorie.test;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
 
 import it.prova.gestioneordiniarticolicategorie.dao.EntityManagerUtil;
 import it.prova.gestioneordiniarticolicategorie.model.Articolo;
